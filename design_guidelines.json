@@ -1,0 +1,113 @@
+{
+  "theme": "light",
+  "archetype": "1_organic_earthy",
+  "colors": {
+    "background_primary": "#F8FAF8",
+    "background_secondary": "#FFFFFF",
+    "primary": "#059669",
+    "primary_hover": "#047857",
+    "secondary_accent": "#D97706",
+    "text_main": "#111827",
+    "text_muted": "#4B5563",
+    "border_color": "#E5E7EB",
+    "success": "#16A34A",
+    "warning": "#F59E0B",
+    "danger": "#DC2626",
+    "surface_glass": "rgba(255, 255, 255, 0.8)"
+  },
+  "typography": {
+    "font_heading": "Manrope, sans-serif",
+    "font_body": "Work Sans, sans-serif",
+    "sizes": {
+      "h1": "text-3xl sm:text-4xl",
+      "h2": "text-2xl sm:text-3xl",
+      "h3": "text-xl sm:text-2xl",
+      "h4": "text-lg sm:text-xl",
+      "body_large": "text-lg",
+      "body_base": "text-base",
+      "small": "text-sm"
+    },
+    "guidelines": "Minimum 16px font size for all essential content to ensure readability in sunlight. High contrast text against light backgrounds."
+  },
+  "spacing_and_layout": {
+    "mobile_first": true,
+    "max_width": "max-w-md mx-auto md:max-w-4xl",
+    "container_padding": "p-4 sm:p-6",
+    "grid_system": "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6",
+    "bento_spacing": "Generous spacing. Use p-4 to p-6 inside cards."
+  },
+  "components": {
+    "navigation": {
+      "type": "bottom_tab_bar",
+      "behavior": "fixed bottom-0 w-full z-50 bg-white border-t border-gray-200 pb-safe",
+      "items_alignment": "flex justify-around items-center h-16",
+      "active_state": "text-[#059669]",
+      "inactive_state": "text-gray-500"
+    },
+    "cards": {
+      "style": "flat solid, rounded-xl, 1px border #E5E7EB, slight shadow-sm on hover",
+      "padding": "p-4 sm:p-6"
+    },
+    "buttons": {
+      "primary": "bg-[#059669] text-white rounded-lg px-4 py-3 font-semibold w-full sm:w-auto text-base sm:text-lg hover:bg-[#047857] transition-colors",
+      "secondary": "bg-white text-[#059669] border-2 border-[#059669] rounded-lg px-4 py-3 font-semibold text-base sm:text-lg hover:bg-gray-50 transition-colors"
+    },
+    "weather_widget": {
+      "style": "gradient background (e.g., from-blue-50 to-green-50), bold temperature text, Lucide weather icons (Sun, Cloud), prominent current conditions with smaller 3-day forecast at bottom."
+    },
+    "mandi_bhav": {
+      "style": "clean table or stack of cards on mobile. Distinct badges for Location and Crop. Highlight Min/Max prices with color-coding (e.g., red for down, green for up, or bold black for clarity)."
+    },
+    "government_schemes": {
+      "style": "blog-style list of cards. Image on top (or left on desktop), clear 'Scheme Name' in h3, 2-line 'Benefit' summary, primary CTA 'Apply Now'."
+    },
+    "affiliate_products": {
+      "style": "2-column grid on mobile, 3-column on desktop. High-quality product image, clean white background, clear price, 'Buy on Amazon' primary button."
+    },
+    "monetization_ads": {
+      "style": "reserved placeholder divs with bg-gray-100, border-dashed border-2 border-gray-300, centered text 'AdSense Placeholder', fixed heights (e.g., h-24 for banner, h-64 for sidebar)."
+    }
+  },
+  "icons": {
+    "library": "lucide-react",
+    "usage": "Use highly recognizable literal icons: Tractor for Mandi, Cloud/Sun for Weather, Leaf for Schemes, ShoppingCart for Store. Size: w-6 h-6 for tabs, w-8 h-8 for widgets."
+  },
+  "media": {
+    "image_urls": [
+      {
+        "category": "hero_background",
+        "url": "https://images.pexels.com/photos/31983759/pexels-photo-31983759.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Farmer in a verdant field, establishing context."
+      },
+      {
+        "category": "hero_alternate",
+        "url": "https://images.unsplash.com/photo-1767880408267-e9f64de1fe7a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzOTB8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBmYXJtZXIlMjBncmVlbiUyMGZpZWxkfGVufDB8fHx8MTc3Njk2ODY4NHww&ixlib=rb-4.1.0&q=85",
+        "description": "Farmer with oxen in a lush green field."
+      },
+      {
+        "category": "product_seeds",
+        "url": "https://images.unsplash.com/photo-1705475388190-775066fd69a5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxhZ3JpY3VsdHVyZSUyMHNlZWRzJTIwcGFja2V0fGVufDB8fHx8MTc3Njk2ODY5OXww&ixlib=rb-4.1.0&q=85",
+        "description": "Variety of beans and cereals/seeds."
+      },
+      {
+        "category": "product_tool",
+        "url": "https://images.pexels.com/photos/35291342/pexels-photo-35291342.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Farmer's hand gripping a hoe."
+      }
+    ],
+    "logo_strategy": "Use text-based logo with Lucide Sprout or Tractor icon next to it if no image logo provided."
+  },
+  "motion_and_interactions": {
+    "hover_states": "Slight lift (-translate-y-1) and shadow-md on cards and buttons.",
+    "transitions": "transition-all duration-200 ease-in-out",
+    "accessibility": "Always include focus:ring-2 focus:ring-[#059669] focus:ring-offset-2 on interactive elements."
+  },
+  "instructions_to_main_agent": [
+    "Ensure minimum text size is text-base (16px) for readability.",
+    "Implement language switcher (EN/HI/MR/PA) in the top header. You can mock the translations but keep the UI element.",
+    "Layout should primarily target mobile (max-w-md mx-auto for main content view on desktop, or standard responsive with bottom nav switching to side nav on desktop).",
+    "Include data-testid attributes on all interactive elements.",
+    "For the AdSense placeholders, use a distinct visual style (dashed border, gray background) so they are obvious but not disruptive.",
+    "Use lucide-react icons for the bottom tab bar: Home, Tractor (Mandi), Cloud (Weather), Store (Products)."
+  ]
+}

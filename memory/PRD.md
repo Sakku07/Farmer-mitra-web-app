@@ -30,6 +30,39 @@ Build a full-scale, production-ready 'Farmer Helper' Web Application using React
 - AdSense placeholder component
 - i18n with 4 languages
 
+## Implemented (Feb 2026 — Pro-Mandi upgrade, iteration 2)
+- **Dynamic District dropdown** dependent on selected State (with 1-hour in-memory cache)
+- **Refresh button** on Mandi + Insights pages (re-fetches, shows "Updated: HH:MM:SS")
+- **'Made with Emergent' badge removed** via MutationObserver in App.js
+- **Clickable crop cards** → new `/insights/:commodity` page
+- **Market Insights page** with:
+  - Min / Modal / Max price stat cards
+  - 7-Day Price Trend Bar Chart (recharts) with green/amber deltas
+  - Market Arrivals list (price spread, % diff)
+  - Historical Price list (up to 100 records)
+  - Auto-adaptive "Additional Info" block (shows any field returned by data.gov.in)
+  - Professional "Data Updating" empty state when data missing
+- **Skeleton loaders** (shimmer animation) replace spinners everywhere
+- **Emerald + Slate** color palette, all Lucide icons
+- Auto-adaptive UI that renders any extra data.gov.in fields under "Additional details"
+- Insights translated into EN/HI/MR/PA
+
+## Implemented (Feb 2026 — Control Center + Performance, iteration 3)
+- **Home redesigned**: 4 titled feature containers with distinct tints — Weather (light emerald), Mandi (slate), Schemes (amber), Products (slate). Bold Lucide icons in each header.
+- **Global Refresh** button + "Last updated: HH:MM:SS" timestamp on Home
+- **Parallel data fetching** with `Promise.all` on Home (zero-lag)
+- **30-minute localStorage SWR cache** (`fh_cache::*` keys) — instant reloads with background revalidation
+- **500ms debounce** on Mandi search input
+- **Notifications system**:
+  - Backend: `/api/notifications` CRUD + `broadcast-scheme/{id}` + `broadcast-product/{id}` endpoints
+  - Frontend: `NotificationsProvider` polls every 30s, triggers browser Notification API + sonner toast
+  - **Bell in TopHeader** with unread badge + dropdown
+  - **Admin → "Notify Users" button** on every Scheme & Product row
+  - **Admin → Notifications tab** with custom broadcast form + history + delete
+- **Admin Dashboard redesigned** with left sidebar (Govt Schemes / Store Products / Notifications / Back to App) on desktop; mobile drawer with hamburger menu
+- **Permanent badge removal** — `#emergent-badge` content stripped from `public/index.html` at build time + MutationObserver as safety net
+- **Upstream reliability** — data.gov.in calls now use 45s timeout + 1 automatic retry
+
 ## Backlog (P1 / P2)
 - P1: Admin panel — add image upload for products/schemes (object storage)
 - P1: Favorite / save scheme for later

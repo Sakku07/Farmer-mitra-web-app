@@ -16,13 +16,15 @@
     "view_all": "ਸਾਰੇ ਵੇਖੋ",
     "featured_schemes": "ਮੁੱਖ ਸਕੀਮਾਂ",
     "popular_products": "ਪ੍ਰਸਿੱਧ ਉਤਪਾਦ",
-    "todays_mandi": "ਅੱਜ ਦਾ ਮੰਡੀ ਭਾਅ"
+    "todays_mandi": "ਅੱਜ ਦਾ ਮੰਡੀ ਭਾਅ",
+    "last_updated": "ਆਖਰੀ ਅੱਪਡੇਟ"
   },
   "mandi": {
     "title": "ਮੰਡੀ ਭਾਅ",
     "subtitle": "ਸਾਰੇ ਭਾਰਤ ਦੇ ਤਾਜ਼ਾ ਭਾਅ",
     "search_placeholder": "ਫਸਲ, ਮੰਡੀ ਜਾਂ ਜ਼ਿਲ੍ਹਾ ਲੱਭੋ…",
     "state": "ਰਾਜ",
+    "district": "ਜ਼ਿਲ੍ਹਾ",
     "commodity": "ਫਸਲ",
     "any": "ਕੋਈ ਵੀ",
     "crop": "ਫਸਲ",
@@ -32,9 +34,16 @@
     "modal_price": "ਮਾਡਲ",
     "per_quintal": "ਪ੍ਰਤੀ ਕੁਇੰਟਲ",
     "no_results": "ਕੋਈ ਭਾਅ ਨਹੀਂ ਮਿਲਿਆ।",
+    "no_results_hint": "ਰਾਜ, ਜ਼ਿਲ੍ਹਾ ਜਾਂ ਫਸਲ ਬਦਲ ਕੇ ਵੇਖੋ।",
     "error": "ਭਾਅ ਲੋਡ ਨਹੀਂ ਹੋਏ।",
     "loading": "ਭਾਅ ਲੋਡ ਹੋ ਰਹੇ ਹਨ…",
-    "date": "ਆਗਮਨ"
+    "date": "ਆਗਮਨ",
+    "refresh": "ਰੀਫ੍ਰੈਸ਼",
+    "updated": "ਅੱਪਡੇਟ",
+    "results": "ਨਤੀਜੇ",
+    "select_state_first": "ਪਹਿਲਾਂ ਰਾਜ ਚੁਣੋ",
+    "loading_districts": "ਜ਼ਿਲ੍ਹੇ ਲੋਡ ਹੋ ਰਹੇ…",
+    "extra_fields": "ਹੋਰ ਜਾਣਕਾਰੀ"
   },
   "weather": {
     "title": "ਮੌਸਮ",
@@ -94,12 +103,42 @@
     "apply_url": "ਅਪਲਾਈ URL",
     "description": "ਵੇਰਵਾ",
     "eligibility": "ਯੋਗਤਾ",
-    "benefit_input": "ਲਾਭ (1 ਲਾਈਨ)"
+    "benefit_input": "ਲਾਭ (1 ਲਾਈਨ)",
+    "notifications": "ਸੂਚਨਾਵਾਂ",
+    "notify_users": "ਉਪਭੋਗਤਾਵਾਂ ਨੂੰ ਸੂਚਿਤ ਕਰੋ",
+    "notify_sent": "ਸਾਰਿਆਂ ਨੂੰ ਸੂਚਨਾ ਭੇਜੀ ਗਈ!",
+    "broadcast_title": "ਕਸਟਮ ਸੂਚਨਾ ਭੇਜੋ",
+    "notif_title_ph": "ਜਿਵੇਂ: ਨਵੀਂ PM-KISAN ਕਿਸ਼ਤ",
+    "notif_body_ph": "ਸੰਖੇਪ ਵੇਰਵਾ",
+    "send_broadcast": "ਸਾਰਿਆਂ ਨੂੰ ਭੇਜੋ",
+    "sent_updates": "ਭੇਜੀਆਂ ਸੂਚਨਾਵਾਂ",
+    "no_notifications": "ਹਾਲੇ ਕੋਈ ਸੂਚਨਾ ਨਹੀਂ।",
+    "back_to_app": "ਐਪ ਤੇ ਵਾਪਸ",
+    "created": "ਬਣਾਇਆ",
+    "updated": "ਅੱਪਡੇਟ ਕੀਤਾ",
+    "deleted": "ਹਟਾਇਆ"
   },
   "common": {
     "language": "ਭਾਸ਼ਾ",
     "ad_placeholder": "ਵਿਗਿਆਪਨ",
     "retry": "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼",
     "login": "ਐਡਮਿਨ"
+  },
+  "insights": {
+    "back": "ਮੰਡੀ ਵੱਲ ਵਾਪਸ",
+    "all_india": "ਸਾਰਾ ਭਾਰਤ",
+    "as_of": "ਤਾਰੀਖ",
+    "trend_7day": "7 ਦਿਨ ਦਾ ਭਾਅ ਰੁਝਾਨ",
+    "trend_updating": "ਰੁਝਾਨ ਡੇਟਾ ਅੱਪਡੇਟ ਹੋ ਰਿਹਾ",
+    "trend_updating_hint": "ਅਜੇ ਕਾਫੀ ਡੇਟਾ ਨਹੀਂ।",
+    "market_arrivals": "ਮੰਡੀ ਆਮਦ",
+    "arrivals_updating": "ਆਮਦ ਡੇਟਾ ਅੱਪਡੇਟ ਹੋ ਰਿਹਾ",
+    "arrivals_updating_hint": "ਇਸ ਫਸਲ-ਮੰਡੀ ਲਈ ਆਮਦ ਡੇਟਾ ਉਪਲਬਧ ਨਹੀਂ।",
+    "spread": "ਫਰਕ",
+    "history": "ਪੁਰਾਣੇ ਭਾਅ",
+    "no_history": "ਕੋਈ ਪੁਰਾਣਾ ਭਾਅ ਨਹੀਂ",
+    "no_history_hint": "ਇਸ ਚੋਣ ਲਈ ਕੋਈ ਭਾਅ ਰਿਕਾਰਡ ਨਹੀਂ ਮਿਲਿਆ।",
+    "additional_info": "ਹੋਰ ਜਾਣਕਾਰੀ",
+    "error": "ਜਾਣਕਾਰੀ ਲੋਡ ਨਹੀਂ ਹੋ ਸਕੀ।"
   }
 }

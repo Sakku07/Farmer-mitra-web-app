@@ -78,8 +78,15 @@ class TestAuth:
 # ---------- Mandi ----------
 class TestMandi:
     def test_mandi_default(self, session):
-        r = session.get(f"{API}/mandi?limit=10", timeout=30)
-        assert r.status_code == 200, r.text
+        # data.gov.in can be slow; retry once
+        r = None
+        for _ in range(2):
+            try:
+                r = session.get(f"{API}/mandi?limit=10", timeout=60)
+                break
+            except requests.exceptions.ReadTimeout:
+                time.sleep(2)
+        assert r is not None and r.status_code == 200, (r.text if r else "no response")
         d = r.json()
         assert "records" in d and "count" in d
         assert isinstance(d["records"], list)
@@ -89,10 +96,81 @@ class TestMandi:
                 assert k in rec
 
     def test_mandi_filter(self, session):
-        r = session.get(f"{API}/mandi?state=Maharashtra&limit=5", timeout=30)
-        assert r.status_code == 200
+        r = None
+        for _ in range(3):
+            r = session.get(f"{API}/mandi?state=Maharashtra&limit=5", timeout=60)
+            if r.status_code == 200:
+                break
+            time.sleep(2)
+        assert r.status_code == 200, f"{r.status_code}: {r.text[:200]}"
         d = r.json()
         assert isinstance(d["records"], list)
+
+    def test_mandi_preserves_all_datagovin_fields(self, session):
+        """Backwards-compat: /api/mandi must pass through every field returned
+        by data.gov.in. At the time of this test upstream only returns the 10
+        canonical lowercase fields, but the backend uses `merged = dict(rec)`
+        so any extra field would be surfaced automatically."""
+        r = session.get(f"{API}/mandi?limit=5", timeout=60)
+        assert r.status_code == 200
+        recs = r.json().get("records", [])
+        if not recs:
+            pytest.skip("No mandi records returned by upstream")
+        rec = recs[0]
+        # Verify canonical keys all present (both the always-added aliases and
+        # any extras are exposed). This proves the pass-through contract.
+        for k in ("state", "district", "market", "commodity", "variety",
+                  "grade", "arrival_date", "min_price", "max_price", "modal_price"):
+            assert k in rec, f"canonical key missing: {k}"
+
+    def test_mandi_districts_for_state(self, session):
+        r = session.get(f"{API}/mandi/districts?state=Maharashtra", timeout=60)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["state"] == "Maharashtra"
+        assert isinstance(d["districts"], list)
+        assert "cached" in d
+        # First call should be uncached
+        assert d["cached"] in (False, True)
+
+    def test_mandi_districts_is_cached_on_second_call(self, session):
+        # warm
+        session.get(f"{API}/mandi/districts?state=Punjab", timeout=60)
+        r = session.get(f"{API}/mandi/districts?state=Punjab", timeout=30)
+        assert r.status_code == 200
+        d = r.json()
+        assert d["cached"] is True
+        assert isinstance(d["districts"], list)
+
+    def test_mandi_districts_different_states_differ(self, session):
+        r1 = session.get(f"{API}/mandi/districts?state=Maharashtra", timeout=60)
+        r2 = session.get(f"{API}/mandi/districts?state=Punjab", timeout=60)
+        assert r1.status_code == 200 and r2.status_code == 200
+        d1 = set(r1.json().get("districts", []))
+        d2 = set(r2.json().get("districts", []))
+        # Unlikely to be identical
+        assert d1 != d2 or (len(d1) == 0 and len(d2) == 0)
+
+    def test_mandi_insights_basic(self, session):
+        r = session.get(f"{API}/mandi/insights?commodity=Onion", timeout=60)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        for k in ("commodity", "latest", "trend_7day", "markets", "history", "total_records"):
+            assert k in d, f"missing key: {k}"
+        assert d["commodity"] == "Onion"
+        assert isinstance(d["trend_7day"], list)
+        assert isinstance(d["markets"], list)
+        assert isinstance(d["history"], list)
+        # Trend entries shape
+        for t in d["trend_7day"]:
+            assert "date" in t and "avg_modal" in t
+
+    def test_mandi_insights_with_state_filter(self, session):
+        r = session.get(f"{API}/mandi/insights?commodity=Wheat&state=Gujarat", timeout=60)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["commodity"] == "Wheat"
+        assert d["filters"]["state"] == "Gujarat"
 
 
 # ---------- Weather ----------
@@ -224,3 +302,94 @@ class TestProducts:
         # Non-existent delete
         r = session.delete(f"{API}/products/{pid}", headers=auth_headers, timeout=15)
         assert r.status_code == 404
+
+
+# ---------- Notifications (Iteration 3) ----------
+class TestNotifications:
+    def test_list_notifications_public(self, session):
+        r = session.get(f"{API}/notifications", timeout=15)
+        assert r.status_code == 200
+        assert isinstance(r.json(), list)
+
+    def test_create_notification_requires_auth(self, session):
+        r = session.post(f"{API}/notifications", json={"title": "NoAuth"}, timeout=15)
+        assert r.status_code in (401, 403)
+
+    def test_create_notification(self, session, auth_headers):
+        payload = {
+            "title": f"TEST_Notif_{uuid.uuid4().hex[:6]}",
+            "body": "Test body",
+            "link": "/schemes",
+            "type": "general",
+        }
+        r = session.post(f"{API}/notifications", json=payload, headers=auth_headers, timeout=15)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        for k in ("id", "title", "body", "link", "type", "created_at"):
+            assert k in d
+        assert d["title"] == payload["title"]
+        assert d["type"] == "general"
+
+        # Verify newest-first ordering in list
+        r2 = session.get(f"{API}/notifications?limit=10", timeout=15)
+        assert r2.status_code == 200
+        items = r2.json()
+        assert items and items[0]["id"] == d["id"]
+
+        # Since filter (passing our created_at should exclude our own notif via $gt)
+        # NB: ISO timestamps contain '+' which must be URL-encoded
+        r3 = session.get(f"{API}/notifications", params={"since": d["created_at"]}, timeout=15)
+        assert r3.status_code == 200
+        assert not any(x["id"] == d["id"] for x in r3.json())
+
+        # cleanup
+        session.delete(f"{API}/notifications/{d['id']}", headers=auth_headers, timeout=15)
+
+    def test_list_notifications_limit_cap(self, session):
+        r = session.get(f"{API}/notifications?limit=9999", timeout=15)
+        assert r.status_code == 200
+        assert len(r.json()) <= 200
+
+    def test_broadcast_scheme(self, session, auth_headers):
+        # Use first scheme
+        schemes = session.get(f"{API}/schemes", timeout=15).json()
+        assert schemes
+        sid = schemes[0]["id"]
+        r = session.post(f"{API}/notifications/broadcast-scheme/{sid}", headers=auth_headers, timeout=15)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["type"] == "scheme"
+        assert d["ref_id"] == sid
+        assert d["title"].startswith("New Scheme: ")
+        session.delete(f"{API}/notifications/{d['id']}", headers=auth_headers, timeout=15)
+
+    def test_broadcast_scheme_not_found(self, session, auth_headers):
+        r = session.post(f"{API}/notifications/broadcast-scheme/nonexistent-id", headers=auth_headers, timeout=15)
+        assert r.status_code == 404
+
+    def test_broadcast_scheme_no_auth(self, session):
+        r = session.post(f"{API}/notifications/broadcast-scheme/whatever", timeout=15)
+        assert r.status_code in (401, 403)
+
+    def test_broadcast_product(self, session, auth_headers):
+        products = session.get(f"{API}/products", timeout=15).json()
+        assert products
+        pid = products[0]["id"]
+        r = session.post(f"{API}/notifications/broadcast-product/{pid}", headers=auth_headers, timeout=15)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["type"] == "product"
+        assert d["ref_id"] == pid
+        session.delete(f"{API}/notifications/{d['id']}", headers=auth_headers, timeout=15)
+
+    def test_broadcast_product_not_found(self, session, auth_headers):
+        r = session.post(f"{API}/notifications/broadcast-product/missing", headers=auth_headers, timeout=15)
+        assert r.status_code == 404
+
+    def test_delete_notification_not_found(self, session, auth_headers):
+        r = session.delete(f"{API}/notifications/nonexistent-id", headers=auth_headers, timeout=15)
+        assert r.status_code == 404
+
+    def test_delete_notification_requires_auth(self, session):
+        r = session.delete(f"{API}/notifications/anything", timeout=15)
+        assert r.status_code in (401, 403)

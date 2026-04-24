@@ -1,0 +1,63 @@
+{
+  "summary": "Iteration 2 testing: validated district dropdown, insights page, refresh, skeletons, emerald+slate palette, auto-adaptive fields, emergent badge removal, empty states. Backend 22/22 passing (new tests added for /mandi/districts caching + /mandi/insights). Frontend core flows all work; only caveats are upstream data.gov.in intermittent 502s (backend surfaces error card correctly) and that upstream currently returns only the 10 canonical fields, so the 'Additional details' section is absent but code path is correct.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/mandi?state=<S>", "issue": "Occasional 502 when data.gov.in upstream read-timeout (>30s). Test added retry; add application-level retry or widen timeout to 45s to reduce user-visible errors."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Mandi page state filter fetch", "issue": "When a state is selected, the fresh /api/mandi call sometimes returns 502 (upstream timeout) and shows the red error card. Root cause is upstream data.gov.in slowness, not the frontend. Empty state + retry button behave correctly.", "affected_selectors": ["[data-testid=mandi-error]", "[data-testid=mandi-retry-btn]"]}
+    ],
+    "design_issues": []
+  },
+  "verified_flows": [
+    "Emergent badge removed (#emergent-badge absent after mount; MutationObserver in App.js works)",
+    "Mandi filters card renders with state/district/commodity selects + emerald refresh button",
+    "District select is disabled until a state is chosen ('Select state first')",
+    "Skeleton cards (data-testid=skeleton-card) appear during loading",
+    "Mandi cards (data-testid=mandi-card) render, are role=button, keyboard-focusable, and navigate to /insights/:commodity?state=&district=&market= on click",
+    "Refresh button re-fetches and updates the 'Updated: HH:MM:SS' timestamp",
+    "InsightsPage: price-min / price-modal / price-max cards render with values (e.g., ₹1200 / ₹1300 / ₹1400 /quintal)",
+    "InsightsPage: 7-day trend EmptyState 'Trend data updating' renders when upstream has <2 daily datapoints; BarChart renders when enough data",
+    "InsightsPage: Market Arrivals list (up to 20) and Historical Price list (up to 100) render",
+    "InsightsPage Refresh button and Back to Mandi link work",
+    "No horizontal scroll at 390px viewport",
+    "Admin login regression (admin@farmhelper.in / Admin@123) still navigates to /admin/dashboard",
+    "Lucide icons used throughout (Tractor, MapPin, RefreshCw, CalendarDays, Tag, BadgeCheck, Filter, etc.)"
+  ],
+  "backend_tests_added": [
+    "TestMandi::test_mandi_preserves_all_datagovin_fields — validates passthrough of every canonical key",
+    "TestMandi::test_mandi_districts_for_state — /api/mandi/districts?state=Maharashtra returns districts list",
+    "TestMandi::test_mandi_districts_is_cached_on_second_call — cached:true on warm call",
+    "TestMandi::test_mandi_districts_different_states_differ — Maharashtra vs Punjab differ",
+    "TestMandi::test_mandi_insights_basic — /api/mandi/insights?commodity=Onion returns {commodity, latest, trend_7day, markets, history, total_records}",
+    "TestMandi::test_mandi_insights_with_state_filter — commodity=Wheat&state=Gujarat"
+  ],
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Optional: increase backend upstream timeout on /api/mandi from 30s to 45s (and/or add 1 retry) to reduce user-visible 502s when data.gov.in is slow.",
+    "Informational only: 'Additional details' / 'insights-extra-fields' block is not rendered right now because data.gov.in is currently returning only the 10 canonical lowercase fields (no Commodity_Code, etc.). Code handles extras correctly — no action needed unless upstream schema changes."
+  ],
+  "critical_code_review_comments": [
+    "server.py line 367: districts cache TTL in code is 3600s (1h) but the problem statement says '15 min in-memory cache'. Minor mismatch — update comment or TTL to match intended SLA.",
+    "server.py: /api/mandi and /api/mandi/insights use sync `requests` inside async FastAPI handlers; blocks the event loop. For higher concurrency consider httpx.AsyncClient.",
+    "server.py: global CORS allow_origins from env defaults to '*' when not set; fine for preview but should be tightened in production.",
+    "Frontend MandiBhav.jsx: fetchData runs on every state/district/commodity change; consider debouncing to avoid a burst of requests while user is changing filters."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py (added 6 new test cases for districts + insights + passthrough)"
+  ],
+  "success_rate": {"backend": "100% (22/22)", "frontend": "~95% (all critical flows pass; upstream 502s intermittent)"},
+  "test_credentials": "admin@farmhelper.in / Admin@123 (validated)",
+  "seed_data_creation": "None — existing seed used.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend tests live in /app/backend/tests/backend_test.py; run with `pytest /app/backend/tests/backend_test.py -v`. Public URL is https://mandi-connect-19.preview.emergentagent.com. data.gov.in upstream is intermittently slow so individual mandi tests include retries with 60s timeout. The 'Additional details' block on insights/mandi cards only appears when upstream includes non-canonical fields — don't flag absence as a bug unless upstream schema changes.",
+  "rca of the issue": "No blocking issues. One minor upstream dependency: data.gov.in occasionally takes >30s to respond → backend raises 502. Frontend handles this with a clear red error card + retry button. Recommend raising timeout to 45s and/or 1 retry on the backend to mask the intermittent upstream slowness."
+}

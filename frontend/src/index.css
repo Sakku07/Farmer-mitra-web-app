@@ -72,3 +72,20 @@ code {
 .safe-bottom {
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4.5rem);
 }
+
+/* Hide Emergent platform badge for a clean, custom brand look */
+#emergent-badge,
+a[href*="app.emergent.sh"] {
+    display: none !important;
+}
+
+/* Skeleton shimmer */
+@keyframes fh-shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+.fh-skeleton {
+    background: linear-gradient(90deg, #e5e7eb 0px, #f3f4f6 40px, #e5e7eb 80px);
+    background-size: 400px 100%;
+    animation: fh-shimmer 1.2s infinite linear;
+}

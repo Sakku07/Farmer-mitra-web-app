@@ -1,0 +1,66 @@
+{
+  "summary": "Iteration 3 testing (Notifications + Admin Sidebar + Home redesign + SWR cache + debounce). Backend: 32/33 passing (1 flake = upstream data.gov.in timeout on /api/mandi/districts; not a code bug). All 11 new Notification endpoints pass (auth/list/create/broadcast-scheme/broadcast-product/delete, 404s, 401s, since filter, limit cap). Frontend: ALL critical flows pass — 4 Home feature containers render, home-refresh-btn + Last updated timestamp, NotificationBell with unread badge, dropdown open/close, admin sidebar (desktop) + mobile drawer, Notify Users buttons POST correct broadcast APIs (200), Notifications panel form+list works and POSTs /api/notifications (200), 30-min localStorage SWR cache writes fh_cache::home:schemes and fh_cache::home:products, Promise.all parallel fetch (schemes/products requests fire with 0ms delta), Mandi 500ms debounce works (filters after typing), #emergent-badge absent at runtime, no horizontal scroll at 390px.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/mandi/districts?state=Maharashtra", "issue": "Intermittent 502 when data.gov.in upstream read-timeout (30s). Carry-over from iter 2. Consider adding 1 retry or widening to 45s. Note /api/mandi already uses 45s; /api/mandi/districts and /api/mandi/insights still use 30s. Recommend aligning all upstream timeouts to 45s with 1 retry."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verified_flows": [
+    "Home: 4 distinct feature containers — home-weather-container (emerald tint), home-mandi-container, home-schemes-container (amber), home-products-container — each with bold Lucide icon + title",
+    "Home: data-testid=home-refresh-btn present + 'Last updated: HH:MM:SS AM' timestamp appears after first load",
+    "Home: Promise.all parallel fetch verified — schemes & products API requests fire with ~0ms delta (same tick)",
+    "Home: 30-min localStorage SWR cache — keys 'fh_cache::home:schemes' and 'fh_cache::home:products' created after first load",
+    "TopHeader: NotificationBell with data-testid=notif-bell-btn; unread badge data-testid=notif-unread-badge (shows '6' in badge); clicking opens data-testid=notif-dropdown",
+    "Notifications dropdown lists recent notifications (Test broadcast, Hello farmers, New Scheme: ..., TEST_Notif_...) — verified via screenshot",
+    "Emergent badge removed: #emergent-badge is absent at runtime (both stripped from index.html and MutationObserver in App.js works)",
+    "Admin login (admin@farmhelper.in / Admin@123) redirects to /admin/dashboard",
+    "Admin sidebar visible at desktop (>=md): Control Center / Govt Schemes / Store Products / Notifications / Back to App (all sidebar entries found)",
+    "Admin mobile: data-testid=admin-menu-btn opens data-testid=admin-mobile-nav drawer at 390px viewport",
+    "Admin: each Scheme row has data-testid=scheme-notify-<id> (6 buttons); clicking POST /api/notifications/broadcast-scheme/<id> → 200 + success toast 'Notification sent to all users!'",
+    "Admin: each Product row has data-testid=product-notify-<id> (6 buttons); clicking POST /api/notifications/broadcast-product/<id> → 200",
+    "Admin Notifications panel: notif-title-input, notif-body-input, notif-link-input, notif-send-btn, notifications-list all present. Sending custom broadcast POSTs /api/notifications → 200, and new item appears in 'Sent updates' list",
+    "Mandi search input has 500ms debounce (no crash/thrash while typing) and correctly filters (typing 'tom' → Tomato visible)",
+    "No horizontal scroll at 390px viewport",
+    "Backend Notifications endpoints: create requires auth (401 no token), list is public with newest-first sort, ?since filter correctly excludes, ?limit capped at 200, broadcast-scheme/product 404 on missing id, delete 404 on missing id"
+  ],
+  "backend_tests_added": [
+    "TestNotifications::test_list_notifications_public",
+    "TestNotifications::test_create_notification_requires_auth",
+    "TestNotifications::test_create_notification (+ since filter + list order)",
+    "TestNotifications::test_list_notifications_limit_cap",
+    "TestNotifications::test_broadcast_scheme / _not_found / _no_auth",
+    "TestNotifications::test_broadcast_product / _not_found",
+    "TestNotifications::test_delete_notification_not_found / _requires_auth"
+  ],
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Optional: align /api/mandi/districts and /api/mandi/insights upstream timeout to 45s (currently 30s) + 1 retry — matches /api/mandi and will reduce rare 502 flakes when data.gov.in is slow.",
+    "No other fixes required. All Iteration 3 acceptance criteria pass."
+  ],
+  "critical_code_review_comments": [
+    "server.py: /api/mandi/districts uses 3600s in-memory TTL but problem statement elsewhere referenced '15 min' — consider aligning or documenting the intended SLA.",
+    "server.py uses sync `requests` in async FastAPI handlers for 3 mandi/weather endpoints (blocks event loop). Carry-over; low-priority for current traffic but should migrate to httpx.AsyncClient before scaling.",
+    "server.py Notification model is clean — UUID id, created_at, indexes on id + created_at created in startup. Good.",
+    "Frontend: cache.js persists API results under 'fh_cache::' prefix with 30-min TTL; verified in localStorage. Good.",
+    "Frontend: NotificationsContext polls /api/notifications every 30s — acceptable; could be upgraded to Server-Sent Events for lower latency if real-time becomes a requirement."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py (added TestNotifications class with 11 new tests covering all 5 new notification endpoints)"
+  ],
+  "success_rate": {"backend": "97% (32/33, 1 upstream flake)", "frontend": "100% (all iter-3 acceptance criteria verified)"},
+  "test_credentials": "admin@farmhelper.in / Admin@123 (validated)",
+  "seed_data_creation": "Test notifications created and auto-cleaned in pytest. A few admin-created TEST_* notifications from Playwright remain in DB (harmless, cleaned via admin panel delete if desired).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend tests at /app/backend/tests/backend_test.py (33 tests). Run `pytest backend/tests/backend_test.py -v`. Notification endpoints are covered by TestNotifications class. The only failure is /api/mandi/districts — upstream data.gov.in flake. Frontend test-ids of interest: home-{weather,mandi,schemes,products}-container, home-refresh-btn, notif-bell-btn, notif-unread-badge, notif-dropdown, notif-item-<id>, admin-sidebar, admin-mobile-nav, admin-menu-btn, sidebar-back-to-app, {scheme,product}-notify-<id>, notifications-panel, notifications-form, notifications-list, notif-{title,body,link}-input, notif-send-btn. Cache keys prefixed 'fh_cache::'. Mandi search debounce=500ms. Public URL https://mandi-connect-19.preview.emergentagent.com.",
+  "rca of the issue": "No blockers. Single backend failure (test_mandi_districts_for_state) is an upstream data.gov.in read-timeout (>30s), not a code bug. Mitigation: increase timeout to 45s + 1 retry inside /api/mandi/districts handler (carry-over recommendation from iter 2)."
+}

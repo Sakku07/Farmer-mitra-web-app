@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import api, { formatApiErrorDetail } from "../../lib/api";
 import { SkeletonList, EmptyState } from "../Skeleton";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const INDIAN_STATES = [
   "Andhra Pradesh", "Bihar", "Chhattisgarh", "Gujarat", "Haryana", "Himachal Pradesh",
@@ -49,6 +50,7 @@ export default function MandiBhav({ compact = false, initialLimit }) {
   const [districtsLoading, setDistrictsLoading] = useState(false);
   const [commodity, setCommodity] = useState("");
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
   const [records, setRecords] = useState([]);
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState("");
@@ -104,14 +106,14 @@ export default function MandiBhav({ compact = false, initialLimit }) {
   }, [state, district, commodity, limit]);
 
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
+    const q = debouncedSearch.trim().toLowerCase();
     if (!q) return records;
     return records.filter((r) =>
       [r.commodity, r.market, r.district, r.state, r.variety, r.grade]
         .filter(Boolean)
         .some((v) => String(v).toLowerCase().includes(q))
     );
-  }, [records, search]);
+  }, [records, debouncedSearch]);
 
   const shown = compact ? filtered.slice(0, 5) : filtered;
 

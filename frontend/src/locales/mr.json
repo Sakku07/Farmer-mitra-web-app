@@ -16,7 +16,8 @@
     "view_all": "सर्व पहा",
     "featured_schemes": "महत्त्वाच्या योजना",
     "popular_products": "लोकप्रिय उत्पादने",
-    "todays_mandi": "आजचा बाजार भाव"
+    "todays_mandi": "आजचा बाजार भाव",
+    "last_updated": "शेवटचे अद्यतन"
   },
   "mandi": {
     "title": "बाजार भाव",
@@ -102,7 +103,20 @@
     "apply_url": "अर्ज URL",
     "description": "वर्णन",
     "eligibility": "पात्रता",
-    "benefit_input": "फायदा (१ ओळ)"
+    "benefit_input": "फायदा (१ ओळ)",
+    "notifications": "सूचना",
+    "notify_users": "वापरकर्त्यांना सूचित करा",
+    "notify_sent": "सर्वांना सूचना पाठवली!",
+    "broadcast_title": "कस्टम सूचना पाठवा",
+    "notif_title_ph": "उदा. नवीन PM-KISAN हप्ता",
+    "notif_body_ph": "संक्षिप्त माहिती",
+    "send_broadcast": "सर्वांना पाठवा",
+    "sent_updates": "पाठवलेल्या सूचना",
+    "no_notifications": "अजून कोणतीही सूचना नाही.",
+    "back_to_app": "अ‍ॅपवर परत",
+    "created": "तयार केले",
+    "updated": "अद्यतनित केले",
+    "deleted": "हटवले"
   },
   "common": {
     "language": "भाषा",

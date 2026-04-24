@@ -137,6 +137,19 @@ class Product(ProductIn):
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
+class NotificationIn(BaseModel):
+    title: str
+    body: str = ""
+    link: str = ""
+    type: str = "general"  # "general" | "scheme" | "product"
+    ref_id: Optional[str] = None
+
+
+class Notification(NotificationIn):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
 # ============ Seed ============
 INITIAL_SCHEMES = [
     {
@@ -618,6 +631,69 @@ async def delete_product(product_id: str, _: dict = Depends(get_current_admin)):
     return {"ok": True}
 
 
+# ---- Notifications ----
+@api_router.get("/notifications", response_model=List[Notification])
+async def list_notifications(since: Optional[str] = None, limit: int = 50):
+    query = {}
+    if since:
+        query["created_at"] = {"$gt": since}
+    items = (
+        await db.notifications.find(query, {"_id": 0})
+        .sort("created_at", -1)
+        .to_list(min(max(limit, 1), 200))
+    )
+    return items
+
+
+@api_router.post("/notifications", response_model=Notification)
+async def create_notification(
+    body: NotificationIn, _: dict = Depends(get_current_admin)
+):
+    notif = Notification(**body.model_dump())
+    await db.notifications.insert_one(notif.model_dump())
+    return notif
+
+
+@api_router.post("/notifications/broadcast-scheme/{scheme_id}", response_model=Notification)
+async def broadcast_scheme(scheme_id: str, _: dict = Depends(get_current_admin)):
+    scheme = await db.schemes.find_one({"id": scheme_id}, {"_id": 0})
+    if not scheme:
+        raise HTTPException(status_code=404, detail="Scheme not found")
+    notif = Notification(
+        title=f"New Scheme: {scheme['name']}",
+        body=scheme.get("benefit", "")[:160],
+        link="/schemes",
+        type="scheme",
+        ref_id=scheme_id,
+    )
+    await db.notifications.insert_one(notif.model_dump())
+    return notif
+
+
+@api_router.post("/notifications/broadcast-product/{product_id}", response_model=Notification)
+async def broadcast_product(product_id: str, _: dict = Depends(get_current_admin)):
+    product = await db.products.find_one({"id": product_id}, {"_id": 0})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    notif = Notification(
+        title=f"New in Store: {product['name']}",
+        body=f"{product.get('category', '')} · ₹{int(product.get('price', 0))}",
+        link="/products",
+        type="product",
+        ref_id=product_id,
+    )
+    await db.notifications.insert_one(notif.model_dump())
+    return notif
+
+
+@api_router.delete("/notifications/{notif_id}")
+async def delete_notification(notif_id: str, _: dict = Depends(get_current_admin)):
+    result = await db.notifications.delete_one({"id": notif_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    return {"ok": True}
+
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -637,6 +713,8 @@ async def on_startup():
     await db.users.create_index("email", unique=True)
     await db.schemes.create_index("id", unique=True)
     await db.products.create_index("id", unique=True)
+    await db.notifications.create_index("id", unique=True)
+    await db.notifications.create_index("created_at")
     await seed_admin()
     await seed_content()
     logger.info("Startup: admin seeded, content seeded.")

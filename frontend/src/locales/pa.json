@@ -16,7 +16,8 @@
     "view_all": "ਸਾਰੇ ਵੇਖੋ",
     "featured_schemes": "ਮੁੱਖ ਸਕੀਮਾਂ",
     "popular_products": "ਪ੍ਰਸਿੱਧ ਉਤਪਾਦ",
-    "todays_mandi": "ਅੱਜ ਦਾ ਮੰਡੀ ਭਾਅ"
+    "todays_mandi": "ਅੱਜ ਦਾ ਮੰਡੀ ਭਾਅ",
+    "last_updated": "ਆਖਰੀ ਅੱਪਡੇਟ"
   },
   "mandi": {
     "title": "ਮੰਡੀ ਭਾਅ",
@@ -102,7 +103,20 @@
     "apply_url": "ਅਪਲਾਈ URL",
     "description": "ਵੇਰਵਾ",
     "eligibility": "ਯੋਗਤਾ",
-    "benefit_input": "ਲਾਭ (1 ਲਾਈਨ)"
+    "benefit_input": "ਲਾਭ (1 ਲਾਈਨ)",
+    "notifications": "ਸੂਚਨਾਵਾਂ",
+    "notify_users": "ਉਪਭੋਗਤਾਵਾਂ ਨੂੰ ਸੂਚਿਤ ਕਰੋ",
+    "notify_sent": "ਸਾਰਿਆਂ ਨੂੰ ਸੂਚਨਾ ਭੇਜੀ ਗਈ!",
+    "broadcast_title": "ਕਸਟਮ ਸੂਚਨਾ ਭੇਜੋ",
+    "notif_title_ph": "ਜਿਵੇਂ: ਨਵੀਂ PM-KISAN ਕਿਸ਼ਤ",
+    "notif_body_ph": "ਸੰਖੇਪ ਵੇਰਵਾ",
+    "send_broadcast": "ਸਾਰਿਆਂ ਨੂੰ ਭੇਜੋ",
+    "sent_updates": "ਭੇਜੀਆਂ ਸੂਚਨਾਵਾਂ",
+    "no_notifications": "ਹਾਲੇ ਕੋਈ ਸੂਚਨਾ ਨਹੀਂ।",
+    "back_to_app": "ਐਪ ਤੇ ਵਾਪਸ",
+    "created": "ਬਣਾਇਆ",
+    "updated": "ਅੱਪਡੇਟ ਕੀਤਾ",
+    "deleted": "ਹਟਾਇਆ"
   },
   "common": {
     "language": "ਭਾਸ਼ਾ",

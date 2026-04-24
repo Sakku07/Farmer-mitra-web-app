@@ -16,7 +16,8 @@
     "view_all": "सभी देखें",
     "featured_schemes": "प्रमुख योजनाएँ",
     "popular_products": "लोकप्रिय उत्पाद",
-    "todays_mandi": "आज का मंडी भाव"
+    "todays_mandi": "आज का मंडी भाव",
+    "last_updated": "अंतिम अपडेट"
   },
   "mandi": {
     "title": "मंडी भाव",
@@ -102,7 +103,20 @@
     "apply_url": "आवेदन URL",
     "description": "विवरण",
     "eligibility": "पात्रता",
-    "benefit_input": "लाभ (1 पंक्ति)"
+    "benefit_input": "लाभ (1 पंक्ति)",
+    "notifications": "सूचनाएँ",
+    "notify_users": "उपयोगकर्ताओं को सूचित करें",
+    "notify_sent": "सभी उपयोगकर्ताओं को सूचना भेजी गई!",
+    "broadcast_title": "कस्टम सूचना भेजें",
+    "notif_title_ph": "जैसे: नई PM-KISAN किस्त जारी",
+    "notif_body_ph": "संक्षिप्त विवरण",
+    "send_broadcast": "सभी को भेजें",
+    "sent_updates": "भेजी गई सूचनाएँ",
+    "no_notifications": "अभी तक कोई सूचना नहीं।",
+    "back_to_app": "ऐप पर वापस",
+    "created": "बनाया गया",
+    "updated": "अपडेट किया गया",
+    "deleted": "हटा दिया गया"
   },
   "common": {
     "language": "भाषा",

@@ -77,7 +77,7 @@ export default function MandiBhav({ compact = false, initialLimit = 50 }) {
             onChange={(e) => setState(e.target.value)}
             className="rounded-xl border border-gray-200 bg-white px-3 py-3 text-base focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
           >
-            <option value="">{t("mandi.state")}: {t("mandi.any")}</option>
+            <option value="">{`${t("mandi.state")}: ${t("mandi.any")}`}</option>
             {INDIAN_STATES.map((s) => (
               <option key={s} value={s}>{s}</option>
             ))}
@@ -88,7 +88,7 @@ export default function MandiBhav({ compact = false, initialLimit = 50 }) {
             onChange={(e) => setCommodity(e.target.value)}
             className="rounded-xl border border-gray-200 bg-white px-3 py-3 text-base focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
           >
-            <option value="">{t("mandi.commodity")}: {t("mandi.any")}</option>
+            <option value="">{`${t("mandi.commodity")}: ${t("mandi.any")}`}</option>
             {COMMON_CROPS.map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}

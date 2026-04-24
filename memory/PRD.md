@@ -30,6 +30,23 @@ Build a full-scale, production-ready 'Farmer Helper' Web Application using React
 - AdSense placeholder component
 - i18n with 4 languages
 
+## Implemented (Feb 2026 — Pro-Mandi upgrade, iteration 2)
+- **Dynamic District dropdown** dependent on selected State (with 1-hour in-memory cache)
+- **Refresh button** on Mandi + Insights pages (re-fetches, shows "Updated: HH:MM:SS")
+- **'Made with Emergent' badge removed** via MutationObserver in App.js
+- **Clickable crop cards** → new `/insights/:commodity` page
+- **Market Insights page** with:
+  - Min / Modal / Max price stat cards
+  - 7-Day Price Trend Bar Chart (recharts) with green/amber deltas
+  - Market Arrivals list (price spread, % diff)
+  - Historical Price list (up to 100 records)
+  - Auto-adaptive "Additional Info" block (shows any field returned by data.gov.in)
+  - Professional "Data Updating" empty state when data missing
+- **Skeleton loaders** (shimmer animation) replace spinners everywhere
+- **Emerald + Slate** color palette, all Lucide icons
+- Auto-adaptive UI that renders any extra data.gov.in fields under "Additional details"
+- Insights translated into EN/HI/MR/PA
+
 ## Backlog (P1 / P2)
 - P1: Admin panel — add image upload for products/schemes (object storage)
 - P1: Favorite / save scheme for later

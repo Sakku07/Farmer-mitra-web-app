@@ -325,7 +325,7 @@ async def get_mandi_prices(
         params["filters[market]"] = market
 
     try:
-        r = requests.get(DATA_GOV_URL, params=params, timeout=30)
+        r = requests.get(DATA_GOV_URL, params=params, timeout=45)
         r.raise_for_status()
         data = r.json()
     except requests.exceptions.RequestException as e:

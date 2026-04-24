@@ -47,6 +47,22 @@ Build a full-scale, production-ready 'Farmer Helper' Web Application using React
 - Auto-adaptive UI that renders any extra data.gov.in fields under "Additional details"
 - Insights translated into EN/HI/MR/PA
 
+## Implemented (Feb 2026 — Control Center + Performance, iteration 3)
+- **Home redesigned**: 4 titled feature containers with distinct tints — Weather (light emerald), Mandi (slate), Schemes (amber), Products (slate). Bold Lucide icons in each header.
+- **Global Refresh** button + "Last updated: HH:MM:SS" timestamp on Home
+- **Parallel data fetching** with `Promise.all` on Home (zero-lag)
+- **30-minute localStorage SWR cache** (`fh_cache::*` keys) — instant reloads with background revalidation
+- **500ms debounce** on Mandi search input
+- **Notifications system**:
+  - Backend: `/api/notifications` CRUD + `broadcast-scheme/{id}` + `broadcast-product/{id}` endpoints
+  - Frontend: `NotificationsProvider` polls every 30s, triggers browser Notification API + sonner toast
+  - **Bell in TopHeader** with unread badge + dropdown
+  - **Admin → "Notify Users" button** on every Scheme & Product row
+  - **Admin → Notifications tab** with custom broadcast form + history + delete
+- **Admin Dashboard redesigned** with left sidebar (Govt Schemes / Store Products / Notifications / Back to App) on desktop; mobile drawer with hamburger menu
+- **Permanent badge removal** — `#emergent-badge` content stripped from `public/index.html` at build time + MutationObserver as safety net
+- **Upstream reliability** — data.gov.in calls now use 45s timeout + 1 automatic retry
+
 ## Backlog (P1 / P2)
 - P1: Admin panel — add image upload for products/schemes (object storage)
 - P1: Favorite / save scheme for later

@@ -51,6 +51,22 @@ def _to_float(v):
         return None
 
 
+def _fetch_data_gov(params: dict, timeout: int = 45):
+    """GET data.gov.in with one retry on transient timeout errors."""
+    last_err = None
+    for attempt in range(2):
+        try:
+            r = requests.get(DATA_GOV_URL, params=params, timeout=timeout)
+            r.raise_for_status()
+            return r.json()
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            last_err = e
+            continue
+        except requests.exceptions.RequestException as e:
+            raise HTTPException(status_code=502, detail=f"Mandi API error: {str(e)}")
+    raise HTTPException(status_code=502, detail=f"Mandi API error: {str(last_err)}")
+
+
 # ============ Auth helpers ============
 def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
@@ -338,11 +354,9 @@ async def get_mandi_prices(
         params["filters[market]"] = market
 
     try:
-        r = requests.get(DATA_GOV_URL, params=params, timeout=45)
-        r.raise_for_status()
-        data = r.json()
-    except requests.exceptions.RequestException as e:
-        raise HTTPException(status_code=502, detail=f"Mandi API error: {str(e)}")
+        data = _fetch_data_gov(params)
+    except HTTPException:
+        raise
 
     records = data.get("records", [])
     # Keep ALL fields returned by the API (auto-adaptive UI), plus expose a
@@ -435,11 +449,9 @@ async def get_mandi_insights(
         params["filters[market]"] = market
 
     try:
-        r = requests.get(DATA_GOV_URL, params=params, timeout=30)
-        r.raise_for_status()
-        data = r.json()
-    except requests.exceptions.RequestException as e:
-        raise HTTPException(status_code=502, detail=f"Mandi API error: {str(e)}")
+        data = _fetch_data_gov(params)
+    except HTTPException:
+        raise
 
     raw = data.get("records", [])
     records = []

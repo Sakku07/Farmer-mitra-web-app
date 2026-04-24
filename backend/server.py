@@ -21,9 +21,16 @@ from pydantic import BaseModel, Field, EmailStr
 
 
 # MongoDB
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+import os
+# Ye line check karegi ki environment variable hai ya nahi, 
+# nahi toh dummy connection use karegi taaki app crash na ho.
+mongo_uri = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
+try:
+    client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
+    db = client.my_database
+except:
+    print("Database connection failed, but app is running!")
+    
 
 # Constants
 JWT_SECRET = os.environ['JWT_SECRET']

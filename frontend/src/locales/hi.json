@@ -1,0 +1,105 @@
+{
+  "app": {
+    "name": "किसान सहायक",
+    "tagline": "मंडी भाव, मौसम और योजनाएँ — एक ही जगह"
+  },
+  "nav": {
+    "home": "होम",
+    "mandi": "मंडी",
+    "weather": "मौसम",
+    "schemes": "योजनाएँ",
+    "products": "बाज़ार"
+  },
+  "home": {
+    "greeting": "नमस्ते, किसान जी",
+    "subtitle": "आज आपकी खेती के लिए ज़रूरी जानकारी",
+    "view_all": "सभी देखें",
+    "featured_schemes": "प्रमुख योजनाएँ",
+    "popular_products": "लोकप्रिय उत्पाद",
+    "todays_mandi": "आज का मंडी भाव"
+  },
+  "mandi": {
+    "title": "मंडी भाव",
+    "subtitle": "पूरे भारत के ताज़ा भाव",
+    "search_placeholder": "फसल, मंडी या ज़िला खोजें…",
+    "state": "राज्य",
+    "commodity": "फसल",
+    "any": "कोई भी",
+    "crop": "फसल",
+    "market": "मंडी",
+    "min_price": "न्यूनतम",
+    "max_price": "अधिकतम",
+    "modal_price": "मॉडल",
+    "per_quintal": "प्रति क्विंटल",
+    "no_results": "कोई भाव नहीं मिला।",
+    "error": "भाव लोड नहीं हो सके। पुनः प्रयास करें।",
+    "loading": "भाव लोड हो रहे हैं…",
+    "date": "आगमन"
+  },
+  "weather": {
+    "title": "मौसम",
+    "subtitle": "अपने खेत का दिन प्लान करें",
+    "humidity": "नमी",
+    "wind": "हवा",
+    "feels_like": "ऐसा लगता है",
+    "forecast": "3 दिनों का पूर्वानुमान",
+    "use_location": "मेरा स्थान उपयोग करें",
+    "enter_city": "शहर का नाम डालें",
+    "fetch": "मौसम देखें",
+    "loading": "मौसम लोड हो रहा है…",
+    "error": "मौसम नहीं मिला। स्थान की अनुमति दें।",
+    "location_denied": "स्थान की अनुमति नहीं मिली। दिल्ली दिखा रहे हैं।"
+  },
+  "schemes": {
+    "title": "सरकारी योजनाएँ",
+    "subtitle": "भारतीय किसानों के लिए नवीनतम योजनाएँ",
+    "benefit": "लाभ",
+    "apply_now": "अभी आवेदन करें",
+    "learn_more": "और जानें",
+    "no_schemes": "अभी कोई योजना उपलब्ध नहीं है।",
+    "loading": "योजनाएँ लोड हो रही हैं…",
+    "error": "योजनाएँ लोड नहीं हो सकीं।"
+  },
+  "products": {
+    "title": "कृषि बाज़ार",
+    "subtitle": "बीज, औज़ार और बहुत कुछ",
+    "buy_amazon": "अमेज़न पर खरीदें",
+    "all": "सभी",
+    "no_products": "अभी कोई उत्पाद उपलब्ध नहीं।",
+    "loading": "उत्पाद लोड हो रहे हैं…",
+    "error": "उत्पाद लोड नहीं हो सके।"
+  },
+  "admin": {
+    "login_title": "एडमिन लॉगिन",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "login": "लॉगिन",
+    "logout": "लॉगआउट",
+    "dashboard": "एडमिन डैशबोर्ड",
+    "manage_schemes": "योजनाएँ प्रबंधित करें",
+    "manage_products": "उत्पाद प्रबंधित करें",
+    "add_scheme": "योजना जोड़ें",
+    "add_product": "उत्पाद जोड़ें",
+    "edit": "संपादित",
+    "delete": "हटाएँ",
+    "save": "सहेजें",
+    "cancel": "रद्द",
+    "confirm_delete": "क्या आप इसे हटाना चाहते हैं?",
+    "login_failed": "लॉगिन विफल",
+    "name": "नाम",
+    "category": "श्रेणी",
+    "price": "मूल्य (₹)",
+    "image_url": "छवि URL",
+    "amazon_url": "अमेज़न URL",
+    "apply_url": "आवेदन URL",
+    "description": "विवरण",
+    "eligibility": "पात्रता",
+    "benefit_input": "लाभ (1 पंक्ति)"
+  },
+  "common": {
+    "language": "भाषा",
+    "ad_placeholder": "विज्ञापन",
+    "retry": "पुनः प्रयास",
+    "login": "एडमिन"
+  }
+}

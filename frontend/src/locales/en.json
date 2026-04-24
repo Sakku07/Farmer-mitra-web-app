@@ -1,0 +1,105 @@
+{
+  "app": {
+    "name": "Farmer Helper",
+    "tagline": "Prices, weather & schemes — all in one place"
+  },
+  "nav": {
+    "home": "Home",
+    "mandi": "Mandi",
+    "weather": "Weather",
+    "schemes": "Schemes",
+    "products": "Store"
+  },
+  "home": {
+    "greeting": "Namaste, Farmer",
+    "subtitle": "Today's essentials for your farm",
+    "view_all": "View all",
+    "featured_schemes": "Featured Schemes",
+    "popular_products": "Popular Products",
+    "todays_mandi": "Today's Mandi Bhav"
+  },
+  "mandi": {
+    "title": "Mandi Bhav",
+    "subtitle": "Live crop prices from across India",
+    "search_placeholder": "Search by crop, market or district…",
+    "state": "State",
+    "commodity": "Crop",
+    "any": "Any",
+    "crop": "Crop",
+    "market": "Market",
+    "min_price": "Min",
+    "max_price": "Max",
+    "modal_price": "Modal",
+    "per_quintal": "per quintal",
+    "no_results": "No price data matches your search.",
+    "error": "Could not load mandi prices. Please try again.",
+    "loading": "Loading live prices…",
+    "date": "Arrival"
+  },
+  "weather": {
+    "title": "Weather",
+    "subtitle": "Plan your farm day",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "feels_like": "Feels like",
+    "forecast": "3-day forecast",
+    "use_location": "Use my location",
+    "enter_city": "Enter city name",
+    "fetch": "Get Weather",
+    "loading": "Fetching weather…",
+    "error": "Unable to fetch weather. Allow location or try again.",
+    "location_denied": "Location permission denied. Showing Delhi by default."
+  },
+  "schemes": {
+    "title": "Government Schemes",
+    "subtitle": "Latest schemes to support Indian farmers",
+    "benefit": "Benefit",
+    "apply_now": "Apply Now",
+    "learn_more": "Learn more",
+    "no_schemes": "No schemes available yet.",
+    "loading": "Loading schemes…",
+    "error": "Could not load schemes."
+  },
+  "products": {
+    "title": "Farm Store",
+    "subtitle": "Trusted agri products — Seeds, Tools & more",
+    "buy_amazon": "Buy on Amazon",
+    "all": "All",
+    "no_products": "No products available yet.",
+    "loading": "Loading products…",
+    "error": "Could not load products."
+  },
+  "admin": {
+    "login_title": "Admin Login",
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "logout": "Logout",
+    "dashboard": "Admin Dashboard",
+    "manage_schemes": "Manage Schemes",
+    "manage_products": "Manage Products",
+    "add_scheme": "Add Scheme",
+    "add_product": "Add Product",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm_delete": "Delete this item?",
+    "login_failed": "Login failed",
+    "name": "Name",
+    "category": "Category",
+    "price": "Price (INR)",
+    "image_url": "Image URL",
+    "amazon_url": "Amazon URL",
+    "apply_url": "Apply URL",
+    "description": "Description",
+    "eligibility": "Eligibility",
+    "benefit_input": "Benefit (1 line)"
+  },
+  "common": {
+    "language": "Language",
+    "ad_placeholder": "Advertisement",
+    "retry": "Retry",
+    "login": "Admin"
+  }
+}

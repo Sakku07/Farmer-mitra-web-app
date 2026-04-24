@@ -1,0 +1,105 @@
+{
+  "app": {
+    "name": "ਕਿਸਾਨ ਸਹਾਇਕ",
+    "tagline": "ਮੰਡੀ ਭਾਅ, ਮੌਸਮ ਅਤੇ ਸਕੀਮਾਂ — ਇੱਕੋ ਥਾਂ"
+  },
+  "nav": {
+    "home": "ਮੁੱਖ",
+    "mandi": "ਮੰਡੀ",
+    "weather": "ਮੌਸਮ",
+    "schemes": "ਸਕੀਮਾਂ",
+    "products": "ਦੁਕਾਨ"
+  },
+  "home": {
+    "greeting": "ਸਤ ਸ੍ਰੀ ਅਕਾਲ, ਕਿਸਾਨ ਵੀਰ",
+    "subtitle": "ਅੱਜ ਦੀ ਖੇਤੀ ਲਈ ਜ਼ਰੂਰੀ ਜਾਣਕਾਰੀ",
+    "view_all": "ਸਾਰੇ ਵੇਖੋ",
+    "featured_schemes": "ਮੁੱਖ ਸਕੀਮਾਂ",
+    "popular_products": "ਪ੍ਰਸਿੱਧ ਉਤਪਾਦ",
+    "todays_mandi": "ਅੱਜ ਦਾ ਮੰਡੀ ਭਾਅ"
+  },
+  "mandi": {
+    "title": "ਮੰਡੀ ਭਾਅ",
+    "subtitle": "ਸਾਰੇ ਭਾਰਤ ਦੇ ਤਾਜ਼ਾ ਭਾਅ",
+    "search_placeholder": "ਫਸਲ, ਮੰਡੀ ਜਾਂ ਜ਼ਿਲ੍ਹਾ ਲੱਭੋ…",
+    "state": "ਰਾਜ",
+    "commodity": "ਫਸਲ",
+    "any": "ਕੋਈ ਵੀ",
+    "crop": "ਫਸਲ",
+    "market": "ਮੰਡੀ",
+    "min_price": "ਘੱਟੋ-ਘੱਟ",
+    "max_price": "ਵੱਧ ਤੋਂ ਵੱਧ",
+    "modal_price": "ਮਾਡਲ",
+    "per_quintal": "ਪ੍ਰਤੀ ਕੁਇੰਟਲ",
+    "no_results": "ਕੋਈ ਭਾਅ ਨਹੀਂ ਮਿਲਿਆ।",
+    "error": "ਭਾਅ ਲੋਡ ਨਹੀਂ ਹੋਏ।",
+    "loading": "ਭਾਅ ਲੋਡ ਹੋ ਰਹੇ ਹਨ…",
+    "date": "ਆਗਮਨ"
+  },
+  "weather": {
+    "title": "ਮੌਸਮ",
+    "subtitle": "ਆਪਣੇ ਖੇਤ ਦਾ ਦਿਨ ਯੋਜਨਾ ਕਰੋ",
+    "humidity": "ਨਮੀ",
+    "wind": "ਹਵਾ",
+    "feels_like": "ਮਹਿਸੂਸ ਹੁੰਦਾ ਹੈ",
+    "forecast": "3 ਦਿਨਾਂ ਦੀ ਭਵਿੱਖਬਾਣੀ",
+    "use_location": "ਮੇਰਾ ਸਥਾਨ ਵਰਤੋ",
+    "enter_city": "ਸ਼ਹਿਰ ਦਾ ਨਾਮ ਭਰੋ",
+    "fetch": "ਮੌਸਮ ਵੇਖੋ",
+    "loading": "ਮੌਸਮ ਲੋਡ ਹੋ ਰਿਹਾ…",
+    "error": "ਮੌਸਮ ਨਹੀਂ ਮਿਲਿਆ।",
+    "location_denied": "ਸਥਾਨ ਦੀ ਇਜਾਜ਼ਤ ਨਹੀਂ ਮਿਲੀ। ਦਿੱਲੀ ਵਿਖਾ ਰਹੇ ਹਾਂ।"
+  },
+  "schemes": {
+    "title": "ਸਰਕਾਰੀ ਸਕੀਮਾਂ",
+    "subtitle": "ਭਾਰਤੀ ਕਿਸਾਨਾਂ ਲਈ ਨਵੀਆਂ ਸਕੀਮਾਂ",
+    "benefit": "ਲਾਭ",
+    "apply_now": "ਹੁਣੇ ਅਪਲਾਈ ਕਰੋ",
+    "learn_more": "ਹੋਰ ਜਾਣੋ",
+    "no_schemes": "ਹਾਲੇ ਕੋਈ ਸਕੀਮ ਨਹੀਂ।",
+    "loading": "ਸਕੀਮਾਂ ਲੋਡ ਹੋ ਰਹੀਆਂ…",
+    "error": "ਸਕੀਮਾਂ ਲੋਡ ਨਹੀਂ ਹੋਈਆਂ।"
+  },
+  "products": {
+    "title": "ਖੇਤੀ ਦੁਕਾਨ",
+    "subtitle": "ਬੀਜ, ਸੰਦ ਅਤੇ ਹੋਰ ਬਹੁਤ ਕੁਝ",
+    "buy_amazon": "ਅਮੇਜ਼ਨ ਤੇ ਖਰੀਦੋ",
+    "all": "ਸਾਰੇ",
+    "no_products": "ਉਤਪਾਦ ਉਪਲਬਧ ਨਹੀਂ।",
+    "loading": "ਉਤਪਾਦ ਲੋਡ ਹੋ ਰਹੇ…",
+    "error": "ਉਤਪਾਦ ਲੋਡ ਨਹੀਂ ਹੋਏ।"
+  },
+  "admin": {
+    "login_title": "ਐਡਮਿਨ ਲੌਗਿਨ",
+    "email": "ਈਮੇਲ",
+    "password": "ਪਾਸਵਰਡ",
+    "login": "ਲੌਗਿਨ",
+    "logout": "ਲੌਗਆਉਟ",
+    "dashboard": "ਐਡਮਿਨ ਡੈਸ਼ਬੋਰਡ",
+    "manage_schemes": "ਸਕੀਮਾਂ ਪ੍ਰਬੰਧਨ",
+    "manage_products": "ਉਤਪਾਦ ਪ੍ਰਬੰਧਨ",
+    "add_scheme": "ਸਕੀਮ ਸ਼ਾਮਲ ਕਰੋ",
+    "add_product": "ਉਤਪਾਦ ਸ਼ਾਮਲ ਕਰੋ",
+    "edit": "ਸੰਪਾਦਿਤ ਕਰੋ",
+    "delete": "ਹਟਾਓ",
+    "save": "ਸੰਭਾਲੋ",
+    "cancel": "ਰੱਦ",
+    "confirm_delete": "ਕੀ ਹਟਾਉਣਾ ਹੈ?",
+    "login_failed": "ਲੌਗਿਨ ਅਸਫਲ",
+    "name": "ਨਾਮ",
+    "category": "ਸ਼੍ਰੇਣੀ",
+    "price": "ਮੁੱਲ (₹)",
+    "image_url": "ਚਿੱਤਰ URL",
+    "amazon_url": "ਅਮੇਜ਼ਨ URL",
+    "apply_url": "ਅਪਲਾਈ URL",
+    "description": "ਵੇਰਵਾ",
+    "eligibility": "ਯੋਗਤਾ",
+    "benefit_input": "ਲਾਭ (1 ਲਾਈਨ)"
+  },
+  "common": {
+    "language": "ਭਾਸ਼ਾ",
+    "ad_placeholder": "ਵਿਗਿਆਪਨ",
+    "retry": "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼",
+    "login": "ਐਡਮਿਨ"
+  }
+}

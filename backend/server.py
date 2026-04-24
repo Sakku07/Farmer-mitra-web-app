@@ -292,6 +292,11 @@ async def seed_admin():
             {"email": ADMIN_EMAIL},
             {"$set": {"password_hash": hash_password(ADMIN_PASSWORD)}},
         )
+    # Enforce single-admin: remove any other admin accounts not matching current env
+    await db.users.delete_many({
+        "role": "admin",
+        "email": {"$ne": ADMIN_EMAIL},
+    })
 
 
 async def seed_content():

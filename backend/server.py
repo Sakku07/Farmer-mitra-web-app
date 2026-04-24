@@ -35,10 +35,20 @@ OPENWEATHER_KEY = os.environ['OPENWEATHER_KEY']
 
 DATA_GOV_MANDI_RESOURCE = "9ef84268-d588-465a-a308-a864a43d0070"
 DATA_GOV_URL = f"https://api.data.gov.in/resource/{DATA_GOV_MANDI_RESOURCE}"
+DATA_GOV_SOFT_CAP = 10000
 
 app = FastAPI(title="Farmer Helper API")
 api_router = APIRouter(prefix="/api")
 security = HTTPBearer(auto_error=False)
+
+
+def _to_float(v):
+    if v is None or v == "":
+        return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
 
 
 # ============ Auth helpers ============
@@ -303,7 +313,7 @@ async def get_mandi_prices(
     params = {
         "api-key": DATA_GOV_KEY,
         "format": "json",
-        "limit": min(max(limit, 1), 500),
+        "limit": min(max(limit, 1), DATA_GOV_SOFT_CAP),
     }
     if state:
         params["filters[state.keyword]"] = state
@@ -322,25 +332,158 @@ async def get_mandi_prices(
         raise HTTPException(status_code=502, detail=f"Mandi API error: {str(e)}")
 
     records = data.get("records", [])
-    # Normalise
+    # Keep ALL fields returned by the API (auto-adaptive UI), plus expose a
+    # canonical set of aliases the UI consumes directly.
     normalised = []
     for rec in records:
-        normalised.append({
-            "state": rec.get("state") or rec.get("State"),
-            "district": rec.get("district") or rec.get("District"),
-            "market": rec.get("market") or rec.get("Market"),
-            "commodity": rec.get("commodity") or rec.get("Commodity"),
-            "variety": rec.get("variety") or rec.get("Variety"),
-            "grade": rec.get("grade") or rec.get("Grade"),
-            "arrival_date": rec.get("arrival_date") or rec.get("Arrival_Date"),
-            "min_price": rec.get("min_price") or rec.get("Min_Price") or rec.get("min_x0020_price"),
-            "max_price": rec.get("max_price") or rec.get("Max_Price") or rec.get("max_x0020_price"),
-            "modal_price": rec.get("modal_price") or rec.get("Modal_Price") or rec.get("modal_x0020_price"),
-        })
+        merged = dict(rec)  # keep every field as-is
+        merged["state"] = rec.get("state") or rec.get("State")
+        merged["district"] = rec.get("district") or rec.get("District")
+        merged["market"] = rec.get("market") or rec.get("Market")
+        merged["commodity"] = rec.get("commodity") or rec.get("Commodity")
+        merged["variety"] = rec.get("variety") or rec.get("Variety")
+        merged["grade"] = rec.get("grade") or rec.get("Grade")
+        merged["arrival_date"] = rec.get("arrival_date") or rec.get("Arrival_Date")
+        merged["min_price"] = rec.get("min_price") or rec.get("Min_Price") or rec.get("min_x0020_price")
+        merged["max_price"] = rec.get("max_price") or rec.get("Max_Price") or rec.get("max_x0020_price")
+        merged["modal_price"] = rec.get("modal_price") or rec.get("Modal_Price") or rec.get("modal_x0020_price")
+        normalised.append(merged)
     return {
         "total": data.get("total", len(normalised)),
         "count": len(normalised),
         "records": normalised,
+    }
+
+
+_districts_cache: dict = {}
+
+
+@api_router.get("/mandi/districts")
+async def get_mandi_districts(state: str):
+    """Return unique districts available for a given state."""
+    key = state.strip().lower()
+    cached = _districts_cache.get(key)
+    now = datetime.now(timezone.utc)
+    if cached and (now - cached["ts"]).total_seconds() < 3600:
+        return {"state": state, "districts": cached["districts"], "cached": True}
+
+    params = {
+        "api-key": DATA_GOV_KEY,
+        "format": "json",
+        "limit": 500,
+        "filters[state.keyword]": state,
+    }
+    try:
+        r = requests.get(DATA_GOV_URL, params=params, timeout=30)
+        r.raise_for_status()
+        data = r.json()
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=502, detail=f"Mandi API error: {str(e)}")
+    districts = sorted({
+        (rec.get("district") or rec.get("District") or "").strip()
+        for rec in data.get("records", [])
+        if (rec.get("district") or rec.get("District"))
+    })
+    _districts_cache[key] = {"ts": now, "districts": districts}
+    return {"state": state, "districts": districts, "cached": False}
+
+
+def _parse_arrival_date(s: str):
+    if not s:
+        return None
+    for fmt in ("%d/%m/%Y", "%Y-%m-%d", "%d-%m-%Y"):
+        try:
+            return datetime.strptime(s, fmt).date()
+        except Exception:
+            continue
+    return None
+
+
+@api_router.get("/mandi/insights")
+async def get_mandi_insights(
+    commodity: str,
+    state: Optional[str] = None,
+    district: Optional[str] = None,
+    market: Optional[str] = None,
+):
+    """Build rich insights (latest price, 7-day trend, markets, history)
+    from data.gov.in records for a given crop."""
+    params = {
+        "api-key": DATA_GOV_KEY,
+        "format": "json",
+        "limit": 5000,
+        "filters[commodity]": commodity,
+    }
+    if state:
+        params["filters[state.keyword]"] = state
+    if district:
+        params["filters[district]"] = district
+    if market:
+        params["filters[market]"] = market
+
+    try:
+        r = requests.get(DATA_GOV_URL, params=params, timeout=30)
+        r.raise_for_status()
+        data = r.json()
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=502, detail=f"Mandi API error: {str(e)}")
+
+    raw = data.get("records", [])
+    records = []
+    for rec in raw:
+        parsed = _parse_arrival_date(rec.get("arrival_date") or rec.get("Arrival_Date") or "")
+        records.append({
+            **rec,
+            "_date": parsed.isoformat() if parsed else None,
+            "min_price": _to_float(rec.get("min_price") or rec.get("Min_Price")),
+            "max_price": _to_float(rec.get("max_price") or rec.get("Max_Price")),
+            "modal_price": _to_float(rec.get("modal_price") or rec.get("Modal_Price")),
+        })
+
+    # Sort records newest first
+    dated = [r for r in records if r.get("_date")]
+    dated.sort(key=lambda x: x["_date"], reverse=True)
+    undated = [r for r in records if not r.get("_date")]
+
+    latest = dated[0] if dated else (undated[0] if undated else None)
+
+    # 7-day trend: group by date, take avg modal price
+    trend_map = {}
+    for r in dated:
+        d = r["_date"]
+        if not d or r.get("modal_price") is None:
+            continue
+        trend_map.setdefault(d, []).append(r["modal_price"])
+    trend = [
+        {
+            "date": d,
+            "avg_modal": round(sum(v) / len(v), 2),
+            "min": round(min(v), 2),
+            "max": round(max(v), 2),
+            "samples": len(v),
+        }
+        for d, v in trend_map.items()
+    ]
+    trend.sort(key=lambda x: x["date"], reverse=True)
+    trend = list(reversed(trend[:7]))  # oldest -> newest for chart
+
+    # Per-market snapshot (latest record per market)
+    by_market = {}
+    for r in dated + undated:
+        m = r.get("market") or r.get("Market")
+        if not m or m in by_market:
+            continue
+        by_market[m] = r
+    markets = list(by_market.values())[:20]
+
+    return {
+        "commodity": commodity,
+        "filters": {"state": state, "district": district, "market": market},
+        "total_records": len(records),
+        "latest": latest,
+        "trend_7day": trend,
+        "markets": markets,
+        "history": (dated + undated)[:100],
     }
 
 

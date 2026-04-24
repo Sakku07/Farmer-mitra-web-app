@@ -23,6 +23,7 @@
     "subtitle": "भारतभरातील ताजे भाव",
     "search_placeholder": "पीक, बाजार किंवा जिल्हा शोधा…",
     "state": "राज्य",
+    "district": "जिल्हा",
     "commodity": "पीक",
     "any": "कोणतेही",
     "crop": "पीक",
@@ -32,9 +33,16 @@
     "modal_price": "मॉडेल",
     "per_quintal": "प्रति क्विंटल",
     "no_results": "कोणताही भाव आढळला नाही.",
+    "no_results_hint": "राज्य, जिल्हा किंवा पीक बदलून पहा.",
     "error": "भाव लोड होऊ शकले नाहीत.",
     "loading": "भाव लोड होत आहेत…",
-    "date": "आगमन"
+    "date": "आगमन",
+    "refresh": "रिफ्रेश",
+    "updated": "अद्यतन",
+    "results": "निकाल",
+    "select_state_first": "आधी राज्य निवडा",
+    "loading_districts": "जिल्हे लोड होत आहेत…",
+    "extra_fields": "अतिरिक्त माहिती"
   },
   "weather": {
     "title": "हवामान",
@@ -101,5 +109,22 @@
     "ad_placeholder": "जाहिरात",
     "retry": "पुन्हा प्रयत्न",
     "login": "अ‍ॅडमिन"
+  },
+  "insights": {
+    "back": "बाजारावर परत",
+    "all_india": "संपूर्ण भारत",
+    "as_of": "तारीख",
+    "trend_7day": "७ दिवसांचा दर कल",
+    "trend_updating": "कल डेटा अद्यतनित होत आहे",
+    "trend_updating_hint": "अजून पुरेसा डेटा नाही. कृपया नंतर तपासा.",
+    "market_arrivals": "बाजार आवक",
+    "arrivals_updating": "आवक डेटा अद्यतनित होत आहे",
+    "arrivals_updating_hint": "या पीक-बाजारासाठी आवक डेटा उपलब्ध नाही.",
+    "spread": "फरक",
+    "history": "मागील दर",
+    "no_history": "मागील दर नाही",
+    "no_history_hint": "या निवडीसाठी कोणताही दर रेकॉर्ड नाही.",
+    "additional_info": "अतिरिक्त माहिती",
+    "error": "माहिती लोड होऊ शकली नाही."
   }
 }

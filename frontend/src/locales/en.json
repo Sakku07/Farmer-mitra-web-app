@@ -23,6 +23,7 @@
     "subtitle": "Live crop prices from across India",
     "search_placeholder": "Search by crop, market or district…",
     "state": "State",
+    "district": "District",
     "commodity": "Crop",
     "any": "Any",
     "crop": "Crop",
@@ -32,9 +33,16 @@
     "modal_price": "Modal",
     "per_quintal": "per quintal",
     "no_results": "No price data matches your search.",
+    "no_results_hint": "Try changing the state, district or crop filter.",
     "error": "Could not load mandi prices. Please try again.",
     "loading": "Loading live prices…",
-    "date": "Arrival"
+    "date": "Arrival",
+    "refresh": "Refresh",
+    "updated": "Updated",
+    "results": "results",
+    "select_state_first": "Select state first",
+    "loading_districts": "Loading districts…",
+    "extra_fields": "Additional details"
   },
   "weather": {
     "title": "Weather",
@@ -101,5 +109,22 @@
     "ad_placeholder": "Advertisement",
     "retry": "Retry",
     "login": "Admin"
+  },
+  "insights": {
+    "back": "Back to Mandi",
+    "all_india": "All India",
+    "as_of": "As of",
+    "trend_7day": "7-Day Price Trend",
+    "trend_updating": "Trend data updating",
+    "trend_updating_hint": "Not enough recent records yet. Check back later for the 7-day bar chart.",
+    "market_arrivals": "Market Arrivals",
+    "arrivals_updating": "Market arrivals updating",
+    "arrivals_updating_hint": "Arrival volume data isn't available for this crop-market combination yet.",
+    "spread": "Spread",
+    "history": "Historical Prices",
+    "no_history": "No history available",
+    "no_history_hint": "We couldn't find historical price records for this selection.",
+    "additional_info": "Additional Info",
+    "error": "Could not load insights."
   }
 }

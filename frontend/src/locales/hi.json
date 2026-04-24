@@ -23,6 +23,7 @@
     "subtitle": "पूरे भारत के ताज़ा भाव",
     "search_placeholder": "फसल, मंडी या ज़िला खोजें…",
     "state": "राज्य",
+    "district": "ज़िला",
     "commodity": "फसल",
     "any": "कोई भी",
     "crop": "फसल",
@@ -32,9 +33,16 @@
     "modal_price": "मॉडल",
     "per_quintal": "प्रति क्विंटल",
     "no_results": "कोई भाव नहीं मिला।",
+    "no_results_hint": "राज्य, ज़िला या फसल बदलकर देखें।",
     "error": "भाव लोड नहीं हो सके। पुनः प्रयास करें।",
     "loading": "भाव लोड हो रहे हैं…",
-    "date": "आगमन"
+    "date": "आगमन",
+    "refresh": "रीफ्रेश",
+    "updated": "अपडेट",
+    "results": "परिणाम",
+    "select_state_first": "पहले राज्य चुनें",
+    "loading_districts": "ज़िले लोड हो रहे…",
+    "extra_fields": "अतिरिक्त जानकारी"
   },
   "weather": {
     "title": "मौसम",
@@ -101,5 +109,22 @@
     "ad_placeholder": "विज्ञापन",
     "retry": "पुनः प्रयास",
     "login": "एडमिन"
+  },
+  "insights": {
+    "back": "मंडी पर वापस",
+    "all_india": "पूरा भारत",
+    "as_of": "तारीख़",
+    "trend_7day": "7 दिन का भाव रुझान",
+    "trend_updating": "रुझान डेटा अपडेट हो रहा है",
+    "trend_updating_hint": "अभी पर्याप्त डेटा नहीं है। कृपया बाद में जाँचें।",
+    "market_arrivals": "मंडी आवक",
+    "arrivals_updating": "आवक डेटा अपडेट हो रहा है",
+    "arrivals_updating_hint": "इस फसल-मंडी के लिए आवक डेटा उपलब्ध नहीं है।",
+    "spread": "अंतर",
+    "history": "पुराने भाव",
+    "no_history": "कोई पुराना भाव नहीं",
+    "no_history_hint": "इस चयन के लिए कोई भाव रिकॉर्ड नहीं मिला।",
+    "additional_info": "अतिरिक्त जानकारी",
+    "error": "जानकारी लोड नहीं हो सकी।"
   }
 }

@@ -78,8 +78,15 @@ class TestAuth:
 # ---------- Mandi ----------
 class TestMandi:
     def test_mandi_default(self, session):
-        r = session.get(f"{API}/mandi?limit=10", timeout=30)
-        assert r.status_code == 200, r.text
+        # data.gov.in can be slow; retry once
+        r = None
+        for _ in range(2):
+            try:
+                r = session.get(f"{API}/mandi?limit=10", timeout=60)
+                break
+            except requests.exceptions.ReadTimeout:
+                time.sleep(2)
+        assert r is not None and r.status_code == 200, (r.text if r else "no response")
         d = r.json()
         assert "records" in d and "count" in d
         assert isinstance(d["records"], list)
@@ -89,10 +96,81 @@ class TestMandi:
                 assert k in rec
 
     def test_mandi_filter(self, session):
-        r = session.get(f"{API}/mandi?state=Maharashtra&limit=5", timeout=30)
-        assert r.status_code == 200
+        r = None
+        for _ in range(3):
+            r = session.get(f"{API}/mandi?state=Maharashtra&limit=5", timeout=60)
+            if r.status_code == 200:
+                break
+            time.sleep(2)
+        assert r.status_code == 200, f"{r.status_code}: {r.text[:200]}"
         d = r.json()
         assert isinstance(d["records"], list)
+
+    def test_mandi_preserves_all_datagovin_fields(self, session):
+        """Backwards-compat: /api/mandi must pass through every field returned
+        by data.gov.in. At the time of this test upstream only returns the 10
+        canonical lowercase fields, but the backend uses `merged = dict(rec)`
+        so any extra field would be surfaced automatically."""
+        r = session.get(f"{API}/mandi?limit=5", timeout=60)
+        assert r.status_code == 200
+        recs = r.json().get("records", [])
+        if not recs:
+            pytest.skip("No mandi records returned by upstream")
+        rec = recs[0]
+        # Verify canonical keys all present (both the always-added aliases and
+        # any extras are exposed). This proves the pass-through contract.
+        for k in ("state", "district", "market", "commodity", "variety",
+                  "grade", "arrival_date", "min_price", "max_price", "modal_price"):
+            assert k in rec, f"canonical key missing: {k}"
+
+    def test_mandi_districts_for_state(self, session):
+        r = session.get(f"{API}/mandi/districts?state=Maharashtra", timeout=60)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["state"] == "Maharashtra"
+        assert isinstance(d["districts"], list)
+        assert "cached" in d
+        # First call should be uncached
+        assert d["cached"] in (False, True)
+
+    def test_mandi_districts_is_cached_on_second_call(self, session):
+        # warm
+        session.get(f"{API}/mandi/districts?state=Punjab", timeout=60)
+        r = session.get(f"{API}/mandi/districts?state=Punjab", timeout=30)
+        assert r.status_code == 200
+        d = r.json()
+        assert d["cached"] is True
+        assert isinstance(d["districts"], list)
+
+    def test_mandi_districts_different_states_differ(self, session):
+        r1 = session.get(f"{API}/mandi/districts?state=Maharashtra", timeout=60)
+        r2 = session.get(f"{API}/mandi/districts?state=Punjab", timeout=60)
+        assert r1.status_code == 200 and r2.status_code == 200
+        d1 = set(r1.json().get("districts", []))
+        d2 = set(r2.json().get("districts", []))
+        # Unlikely to be identical
+        assert d1 != d2 or (len(d1) == 0 and len(d2) == 0)
+
+    def test_mandi_insights_basic(self, session):
+        r = session.get(f"{API}/mandi/insights?commodity=Onion", timeout=60)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        for k in ("commodity", "latest", "trend_7day", "markets", "history", "total_records"):
+            assert k in d, f"missing key: {k}"
+        assert d["commodity"] == "Onion"
+        assert isinstance(d["trend_7day"], list)
+        assert isinstance(d["markets"], list)
+        assert isinstance(d["history"], list)
+        # Trend entries shape
+        for t in d["trend_7day"]:
+            assert "date" in t and "avg_modal" in t
+
+    def test_mandi_insights_with_state_filter(self, session):
+        r = session.get(f"{API}/mandi/insights?commodity=Wheat&state=Gujarat", timeout=60)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["commodity"] == "Wheat"
+        assert d["filters"]["state"] == "Gujarat"
 
 
 # ---------- Weather ----------

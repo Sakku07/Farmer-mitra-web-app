@@ -63,6 +63,20 @@ Build a full-scale, production-ready 'Farmer Helper' Web Application using React
 - **Permanent badge removal** — `#emergent-badge` content stripped from `public/index.html` at build time + MutationObserver as safety net
 - **Upstream reliability** — data.gov.in calls now use 45s timeout + 1 automatic retry
 
+## Implemented (Feb 2026 — AdSense readiness + deployment, iteration 4)
+- **Admin credentials updated** to `sakkusaifi07@gmail.com` / `Aa670623@`; old admin auto-purged on startup
+- **Backend slimmed for production**: removed `Request`/`logging` wrapper noise; switched to `os.environ.get(...)` config; added `if __name__ == "__main__": uvicorn.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))` for Railway/Render
+- **`requirements.txt` reduced to 9 packages** (fastapi, uvicorn[standard], motor, pymongo, pydantic[email], requests, PyJWT, bcrypt, python-dotenv) — emergentintegrations, pandas, numpy, pytest, black, isort, flake8, mypy, boto3, requests-oauthlib, cryptography, passlib, python-jose, jq, typer, python-multipart, tzdata all removed
+- **`public/index.html` cleaned** — removed PostHog telemetry block, emergent-main.js, emergent-badge stub. Title now "Farmer Helper — Mandi Bhav, Weather & Govt Schemes"
+- **Professional AdSense slots** — new `<AdSensePlaceholder>` renders `<ins class="adsbygoogle">` automatically when `REACT_APP_ADSENSE_CLIENT` + `slotId` are set; otherwise shows clean "Sponsored / Advertisement / Your ad could be here" placeholder with reserved height (no CLS post-approval)
+- **AdSense-approval pages added**:
+  - `/about` — full app description, principles, decision-disclaimer
+  - `/terms` — purpose, informational nature, non-guarantee disclaimer, user-responsibility, AdSense disclosure
+  - `/privacy` — minimal-data collection, third-party services, AdSense cookies + opt-out links
+  - `/contact` — verified support email **shaklensaifi@gmail.com** prominent, copy-button + mailto form + FAQ
+- **Site-wide Footer** with About / Terms / Privacy / Contact links + data-source credits
+- **Tested**: 34/34 backend tests + 100 % frontend acceptance criteria passed; lint clean
+
 ## Backlog (P1 / P2)
 - P1: Admin panel — add image upload for products/schemes (object storage)
 - P1: Favorite / save scheme for later

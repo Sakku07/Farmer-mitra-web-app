@@ -5,7 +5,6 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 import os
-import logging
 import uuid
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional
@@ -13,7 +12,7 @@ from typing import List, Optional
 import bcrypt
 import jwt
 import requests
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
+from fastapi import FastAPI, APIRouter, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -21,9 +20,9 @@ from pydantic import BaseModel, Field, EmailStr
 
 
 # MongoDB
-mongo_url = os.environ['MONGO_URL']
+mongo_url = os.environ.get('MONGO_URL')
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+db = client[os.environ.get('DB_NAME')]
 
 # Constants
 JWT_SECRET = os.environ['JWT_SECRET']
@@ -721,6 +720,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import logging
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -740,3 +741,12 @@ async def on_startup():
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000)),
+    )

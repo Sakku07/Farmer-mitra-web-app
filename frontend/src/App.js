@@ -13,6 +13,10 @@ import ProductsPage from "@/pages/ProductsPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import InsightsPage from "@/pages/InsightsPage";
+import TermsPage from "@/pages/TermsPage";
+import PrivacyPage from "@/pages/PrivacyPage";
+import ContactPage from "@/pages/ContactPage";
+import AboutPage from "@/pages/AboutPage";
 
 function App() {
   useEffect(() => {
@@ -41,6 +45,10 @@ function App() {
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </BrowserRouter>
         <Toaster richColors position="top-center" />

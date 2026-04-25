@@ -8,8 +8,9 @@ import requests
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://mandi-connect-19.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
 
-ADMIN_EMAIL = "admin@farmhelper.in"
-ADMIN_PASSWORD = "Admin@123"
+ADMIN_EMAIL = "sakkusaifi07@gmail.com"
+ADMIN_PASSWORD = "Aa670623@"
+OLD_ADMIN_EMAIL = "admin@farmhelper.in"
 
 
 @pytest.fixture(scope="session")
@@ -57,6 +58,11 @@ class TestAuth:
 
     def test_login_unknown_user(self, session):
         r = session.post(f"{API}/auth/login", json={"email": "noone@foo.com", "password": "x"}, timeout=15)
+        assert r.status_code == 401
+
+    def test_old_admin_login_rejected(self, session):
+        """Iteration 4: old admin@farmhelper.in must be removed and rejected with 401."""
+        r = session.post(f"{API}/auth/login", json={"email": OLD_ADMIN_EMAIL, "password": "Admin@123"}, timeout=15)
         assert r.status_code == 401
 
     def test_me_requires_token(self, session):

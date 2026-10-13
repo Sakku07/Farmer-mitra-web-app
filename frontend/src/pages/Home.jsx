@@ -9,19 +9,21 @@ import SchemeCard from "../components/Schemes/SchemeCard";
 import ProductCard from "../components/Products/ProductCard";
 import AdSensePlaceholder from "../components/AdSensePlaceholder";
 import { SkeletonCard, SkeletonList } from "../components/Skeleton";
-import api from "../lib/api";
+import api, { formatApiErrorDetail } from "../lib/api";
 import { swrFetch } from "../lib/cache";
 
 export default function Home() {
   const { t } = useTranslation();
   const [schemes, setSchemes] = useState(null);
   const [products, setProducts] = useState(null);
+  const [homeError, setHomeError] = useState("");
   const [lastUpdated, setLastUpdated] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
   const loadAll = useCallback(
     async (force = false) => {
       setRefreshing(true);
+      setHomeError("");
       try {
         // Parallel fetch for zero-lag — Promise.all so both complete together.
         const [schemesRes, productsRes] = await Promise.all([
@@ -30,7 +32,8 @@ export default function Home() {
             () => api.get("/schemes").then((r) => r.data),
             {
               ttl: force ? 0 : 30 * 60 * 1000,
-              onRevalidate: (d) => setSchemes(d.slice(0, 2)),
+              onRevalidate: (d) =>
+                setSchemes(Array.isArray(d) ? d.slice(0, 2) : []),
             }
           ),
           swrFetch(
@@ -38,13 +41,27 @@ export default function Home() {
             () => api.get("/products").then((r) => r.data),
             {
               ttl: force ? 0 : 30 * 60 * 1000,
-              onRevalidate: (d) => setProducts(d.slice(0, 4)),
+              onRevalidate: (d) =>
+                setProducts(Array.isArray(d) ? d.slice(0, 4) : []),
             }
           ),
         ]);
-        setSchemes(schemesRes.data.slice(0, 2));
-        setProducts(productsRes.data.slice(0, 4));
+        const schemesData = Array.isArray(schemesRes.data)
+          ? schemesRes.data
+          : [];
+        const productsData = Array.isArray(productsRes.data)
+          ? productsRes.data
+          : [];
+        setSchemes(schemesData.slice(0, 2));
+        setProducts(productsData.slice(0, 4));
         setLastUpdated(new Date());
+      } catch (e) {
+        // Backend down earlier left Home stuck on skeletons forever with no
+        // error UI. Surface the error + retry instead.
+        setHomeError(
+          formatApiErrorDetail(e.response?.data?.detail) ||
+            "Backend se data nahi aa raha. Thodi der baad retry karein."
+        );
       } finally {
         setRefreshing(false);
       }
@@ -87,6 +104,21 @@ export default function Home() {
       </div>
 
       <AdSensePlaceholder slot="banner" className="mb-6" />
+
+      {homeError && schemes === null && products === null ? (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-800">
+          <p className="text-sm font-semibold">Data load nahi hua</p>
+          <p className="mt-1 text-sm">{homeError}</p>
+          <button
+            onClick={() => loadAll(true)}
+            disabled={refreshing}
+            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-70"
+          >
+            <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+            Retry
+          </button>
+        </div>
+      ) : null}
 
       {/* Weather container (light emerald) */}
       <FeatureContainer

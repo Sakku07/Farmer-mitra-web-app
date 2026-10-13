@@ -1,0 +1,3 @@
+# Frontend env template — Netlify Dashboard > Site settings > Environment variables me set karein.
+# CRA build time par inline hota hai, isliye build se PEHLE set karna zaroori hai.
+REACT_APP_BACKEND_URL=https://farmer-mitra.onrender.com

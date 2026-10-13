@@ -18,7 +18,6 @@ services:
       - key: DB_NAME
         sync: false
       - key: JWT_SECRET
-        sync: false
         generateValue: true
       - key: ADMIN_EMAIL
         sync: false

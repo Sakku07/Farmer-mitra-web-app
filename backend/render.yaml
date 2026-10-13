@@ -1,0 +1,32 @@
+# Render Blueprint for the FastAPI backend.
+# Deploy: Render Dashboard > New > Blueprint > connect this repo > select this file.
+# Root: backend/. Do NOT commit real secrets. Set them in Render > Environment.
+# Required env vars are listed in backend/.env.example.
+services:
+  - type: web
+    name: farmer-mitra
+    env: python
+    region: singapore
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/
+    autoDeploy: true
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DATA_GOV_KEY
+        sync: false
+      - key: OPENWEATHER_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://mykisanmitra.in,https://www.mykisanmitra.in

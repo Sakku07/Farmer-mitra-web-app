@@ -1,0 +1,11 @@
+# Backend env template — copy to .env on the server / Render dashboard.
+# NEVER commit real values. Render > Service > Environment me bharein.
+MONGO_URL=mongodb+srv://<user>:<password>@<cluster>/<db>?retryWrites=true&w=majority
+DB_NAME=farmer_helper
+JWT_SECRET=<long-random-secret>
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=<strong-admin-password>
+DATA_GOV_KEY=<data.gov.in-api-key>
+OPENWEATHER_KEY=<openweathermap-api-key>
+CORS_ORIGINS=https://mykisanmitra.in,https://www.mykisanmitra.in
+PORT=8000

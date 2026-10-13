@@ -7,6 +7,11 @@
   command = "npm run build"
   publish = "build"
 
+[build.environment]
+  # Pin Node 20: the webpack toolchain in this repo fails on Node 24
+  # (missing ajv/dist/compile/codegen). Netlify must not default to 24.
+  NODE_VERSION = "20"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

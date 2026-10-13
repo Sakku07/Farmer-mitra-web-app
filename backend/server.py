@@ -20,9 +20,23 @@ from pydantic import BaseModel, Field, EmailStr
 
 
 # MongoDB
+# Fail fast with a clear error if MONGO_URL is missing/empty/localhost.
+# Without this, Motor silently defaults to localhost:27017, then the app
+# crashes after a 30s timeout with a cryptic "Connection refused" on startup.
 mongo_url = os.environ.get('MONGO_URL')
+if not mongo_url or 'localhost' in mongo_url or '127.0.0.1' in mongo_url:
+    raise RuntimeError(
+        "MONGO_URL is missing or points to localhost. Set MONGO_URL to your "
+        "MongoDB Atlas connection string (mongodb+srv://...) in Render > "
+        "Service > Environment. The app cannot start without a real database."
+    )
+db_name = os.environ.get('DB_NAME')
+if not db_name:
+    raise RuntimeError(
+        "DB_NAME is missing. Set DB_NAME in Render > Service > Environment."
+    )
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ.get('DB_NAME')]
+db = client[db_name]
 
 # Constants
 JWT_SECRET = os.environ['JWT_SECRET']

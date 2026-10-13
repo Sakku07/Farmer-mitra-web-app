@@ -1,0 +1,13 @@
+# Netlify config for the React frontend (SPA).
+# Base = frontend/, build = craco build via npm, publish = frontend/build.
+# Env var REACT_APP_BACKEND_URL must be set in Netlify Dashboard BEFORE build,
+# because CRA inlines it at build time. Do not put secrets in this file.
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = "build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

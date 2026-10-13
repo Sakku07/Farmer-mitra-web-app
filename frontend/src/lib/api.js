@@ -4,12 +4,14 @@ import axios from "axios";
 // - CRA inlines REACT_APP_* vars at BUILD time only, so Netlify must set
 //   REACT_APP_BACKEND_URL before `npm run build`.
 // - Older builds used REACT_APP_API_URL, keep it as a fallback.
-// - Final fallback is the live Render service the deployed site already
-//   points to, so a missing env var never becomes "undefined/api" again.
+// - Final fallback is the WORKING backend — the old mykisanmitra service
+//   on Render, which already has its env vars (MONGO_URL etc.).
+//   The new farmer-mitra service has blank env, so it must NOT be
+//   the fallback, or the frontend would call a dead backend again.
 const RAW_BASE =
   process.env.REACT_APP_BACKEND_URL ||
   process.env.REACT_APP_API_URL ||
-  "https://farmer-mitra.onrender.com";
+  "https://mykisanmitra.onrender.com";
 
 const BASE = String(RAW_BASE || "").replace(/\/+$/, "");
 export const API = `${BASE}/api`;
